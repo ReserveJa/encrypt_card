@@ -80,7 +80,7 @@ public class EncryptCardPlugin implements MethodCallHandler {
       String publicKey;
       String publicKeyToken = (String) arguments.get("publicKeyToken");
       String environment = (String) arguments.get("environment");
-      HostProvider hostProvider = environment.equals("TEST") ? CardApi.TEST : CardApi.LIVE_EU;
+      HostProvider hostProvider = environment.equals("TEST") ? CardApi.TEST : CardApi.LIVE_US;
       try {
           publicKey = fetchPublicKey(hostProvider, publicKeyToken);
       } catch (Exception ex) {
