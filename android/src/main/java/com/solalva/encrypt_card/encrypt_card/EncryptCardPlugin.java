@@ -154,6 +154,7 @@ public class EncryptCardPlugin implements MethodCallHandler {
         return dict;
           //throw new Error("Could not encrypt the card", ex);
       }
+
   }
 
   private String fetchPublicKey(HostProvider hostProvider, String publicKeyToken) throws Error {
