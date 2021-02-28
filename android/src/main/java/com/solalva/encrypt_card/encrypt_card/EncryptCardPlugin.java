@@ -82,7 +82,7 @@ public class EncryptCardPlugin implements MethodCallHandler {
       String environment = (String) arguments.get("environment");
       HostProvider hostProvider = environment.equals("TEST") ? CardApi.TEST : CardApi.LIVE_US;
       try {
-          publicKey = fetchPublicKey(hostProvider, publicKeyToken);
+          publicKey = publicKeyToken;
       } catch (Exception ex) {
           throw new Error("Could not fetch the publicKey for token:'" + publicKeyToken + "'", ex);
       }
@@ -150,45 +150,13 @@ public class EncryptCardPlugin implements MethodCallHandler {
         dict.put("encryptedNumber", "");
         dict.put("encryptedSecurityCode", "");
         dict.put("encryptedExpiryMonth", "");
-        dict.put("encryptedExpiryYear", ex.getMessage());
+        dict.put("encryptedExpiryYear", "");
         return dict;
           //throw new Error("Could not encrypt the card", ex);
       }
 
   }
 
-  private String fetchPublicKey(HostProvider hostProvider, String publicKeyToken) throws Error {
-      String publicKey = "";
-      CardApi cardApi = CardApi.getInstance(this.activity.getApplication(), hostProvider);
-      Callable<String> publicKeyFetcherCallable = cardApi.getPublicKey(publicKeyToken);
-      FutureTask publicKeyFetcherTask = new FutureTask(publicKeyFetcherCallable);
-      ExecutorService executor = Executors.newFixedThreadPool(1);
-      executor.execute(publicKeyFetcherTask);
-      while (true) {
-          try {
-              if (publicKeyFetcherTask.isDone()) {
-                  executor.shutdown();
-                  break;
-              }
-              if (!publicKeyFetcherTask.isDone()) {
-                  publicKey = (String) publicKeyFetcherTask.get();
-              }
-          } catch (Exception ex) {
-              return "";
-              //throw new Error("Could not get the publicKey from token: " + publicKeyToken 
-              //+ "***************************************************************"
-              //+ " ACTIVITY= " + this.activity.getApplication().toString()
-              //+ "***************************************************************"
-              //+ " HOSTPROVIDER= " + hostProvider
-              //+ "***************************************************************"
-              //+ " PUBLICKEYTOKEN= " + publicKeyToken 
-              //+ "***************************************************************"
-              //+ ex.toString() 
-              //+ "***************************************************************");
-          }
-      }
-      return publicKey;
-  }
 
   private Card buildCard(String cardNumber, String cardSecurityCode, int cardExpiryMonth, int cardExpiryYear) {
       Card.Builder cardBuilder = new Card.Builder();
