@@ -116,7 +116,7 @@ public class EncryptCardPlugin implements MethodCallHandler {
       String environment = (String) arguments.get("environment");
       HostProvider hostProvider = environment.equals("TEST") ? CardApi.TEST : CardApi.LIVE_US;
       try {
-          publicKey = fetchPublicKey(hostProvider, publicKeyToken);
+          publicKey = publicKeyToken;
       } catch (Exception ex) {
           publicKey = "";
           //throw new Error("Could not fetch the publicKey for token:'" + publicKeyToken + "'", ex);
