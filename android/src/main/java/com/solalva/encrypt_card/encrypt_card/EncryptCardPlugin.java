@@ -150,7 +150,7 @@ public class EncryptCardPlugin implements MethodCallHandler {
         dict.put("encryptedNumber", "");
         dict.put("encryptedSecurityCode", "");
         dict.put("encryptedExpiryMonth", "");
-        dict.put("encryptedExpiryYear", ex.getMessage().toString());
+        dict.put("encryptedExpiryYear", ex.getMessage());
         return dict;
           //throw new Error("Could not encrypt the card", ex);
       }
