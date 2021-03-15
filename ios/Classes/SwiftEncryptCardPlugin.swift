@@ -42,8 +42,8 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         let cardExpiryMonth = arguments["cardExpiryMonth"] as? String
         let cardExpiryYear = arguments["cardExpiryYear"] as? String
         let card = CardEncryptor.Card.init(number: cardNumber, securityCode: cardSecurityCode, expiryMonth: cardExpiryMonth, expiryYear: cardExpiryYear)
-        let environmentString = arguments["environment"] as? String
-        let environment = environmentString=="TEST" ? CardEncryptor.Environment.test : CardEncryptor.Environment.live
+        //let environmentString = arguments["environment"] as? String
+        //let environment = environmentString=="TEST" ? CardEncryptor.Environment.test : CardEncryptor.Environment.live
         let generationDateString = arguments["generationDate"] as? String
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
