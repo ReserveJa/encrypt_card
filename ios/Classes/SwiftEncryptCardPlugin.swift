@@ -21,7 +21,7 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
         let generationDate = dateFormatter.date(from: generationDateString!)
 
-        //let encryptedCard = try CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!)
+        let encryptedCard = CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!)
 
        // let dict = [
        //     "encryptedNumber":encryptedCard.number,
