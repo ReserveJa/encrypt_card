@@ -9,8 +9,8 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
-    
-    private func encryptedCard(_ arguments: NSDictionary,completion: @escaping Completion<NSDictionary>) {
+
+    private func encryptedCard(_ arguments: NSDictionary,completion: @escaping Completion<NSDictionary>) throws {
         let publicKeyToken = arguments["publicKeyToken"] as? String
         let cardNumber = arguments["cardNumber"] as? String
         let cardSecurityCode = arguments["cardSecurityCode"] as? String
@@ -21,43 +21,17 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
         let generationDate = dateFormatter.date(from: generationDateString!)
-        
-        CardEncryptor.encryptedCard(for: card
-            , publicKeyToken: publicKeyToken!) { (resultEncryptedCard) in
-            switch resultEncryptedCard {
-            case .success(let encryptedCard):
-                let dict = [
-                    "encryptedNumber":encryptedCard.number,
-                    "encryptedSecurityCode":encryptedCard.securityCode,
-                    "encryptedExpiryMonth":encryptedCard.expiryMonth,
-                    "encryptedExpiryYear":encryptedCard.expiryYear
-                ]
-                completion(dict as NSDictionary)
-            //case .failure(let error):
-            //    completion([:] as NSDictionary)
-            case .failure(let encryptedCard):
-                let dict = [
-                    "encryptedNumber":"",
-                    "encryptedSecurityCode":"",
-                    "encryptedExpiryMonth":"",
-                    "encryptedExpiryYear":""
-                ]
-                completion(dict as NSDictionary)
-            }
-        }
-    }
 
-    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let arguments = call.arguments as? NSDictionary
-        switch (call.method) {
 
-        case "encryptedCard":
-            encryptedCard(arguments!) { (encryptedCard) in
-                result(encryptedCard)
-            }
-        default:
-            result(FlutterMethodNotImplemented)
-            
-        }
+        let dict = [
+            "encryptedNumber": try CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!).number ,
+            "encryptedSecurityCode": try CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!).securityCode,
+            "encryptedExpiryMonth":  try CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!).expiryMonth,
+            "encryptedExpiryYear": try CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!).expiryYear
+        ]
+        completion(dict as NSDictionary)
+
+
+
     }
 }
