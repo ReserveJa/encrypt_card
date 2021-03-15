@@ -21,7 +21,7 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
         let generationDate = dateFormatter.date(from: generationDateString!)
 
-        let encryptedCard = try CardEncryptor.encryptedCard(for: card, publicKeyToken: publicKeyToken!)
+        let encryptedCard = try CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!)
 
         let dict = [
             "encryptedNumber":encryptedCard.number,
@@ -33,17 +33,16 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
 
     }
 
-    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let arguments = call.arguments as? NSDictionary
-        switch (call.method) {
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+            let arguments = call.arguments as? NSDictionary
+            switch (call.method) {
+            case "encryptedCard":
+               try encryptedCard(arguments!) { (encryptedCard) in
+                    result(encryptedCard)
+                }
+            default:
+                result(FlutterMethodNotImplemented)
 
-        case "encryptedCard":
-            encryptedCard(arguments!) { (encryptedCard) in
-                result(encryptedCard)
             }
-        default:
-            result(FlutterMethodNotImplemented)
-
         }
-    }
 }
