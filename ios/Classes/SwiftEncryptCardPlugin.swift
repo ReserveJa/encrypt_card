@@ -22,7 +22,7 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
         let generationDate = dateFormatter.date(from: generationDateString!)
         
-        CardEncryptor.encrypt(for: card
+        CardEncryptor.encryptedCard(for: card
             , publicKeyToken: publicKeyToken!) { (resultEncryptedCard) in
             switch resultEncryptedCard {
             case .success(let encryptedCard):
@@ -46,14 +46,11 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
             }
         }
     }
-    
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? NSDictionary
         switch (call.method) {
-        case "encryptedToken":
-            encryptedToken(arguments!) { (encryptedToken) in
-                result(encryptedToken)
-            }
+
         case "encryptedCard":
             encryptedCard(arguments!) { (encryptedCard) in
                 result(encryptedCard)
