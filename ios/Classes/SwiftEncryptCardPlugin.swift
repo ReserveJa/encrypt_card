@@ -23,6 +23,7 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
 
         let encryptedCard = CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!)
 
+
        // let dict = [
        //     "encryptedNumber":encryptedCard.number,
        //     "encryptedSecurityCode":encryptedCard.securityCode,
