@@ -1,6 +1,6 @@
 import Adyen
 import UIKit
-import AdyenCard
+
 
 public class SwiftEncryptCardPlugin: NSObject {
 
