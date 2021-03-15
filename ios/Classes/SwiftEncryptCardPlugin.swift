@@ -9,7 +9,7 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
-    private func encryptedCard(_ arguments: NSDictionary,completion: @escaping Completion<NSDictionary>) throws {
+    private func encryptedCard(_ arguments: NSDictionary,completion: @escaping Completion<NSDictionary>) {
         let publicKeyToken = arguments["publicKeyToken"] as? String
         let cardNumber = arguments["cardNumber"] as? String
         let cardSecurityCode = arguments["cardSecurityCode"] as? String
@@ -21,23 +21,31 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
         let generationDate = dateFormatter.date(from: generationDateString!)
 
-        let encryptedCard = try CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!)
+        //let encryptedCard = try CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!)
+
+       // let dict = [
+       //     "encryptedNumber":encryptedCard.number,
+       //     "encryptedSecurityCode":encryptedCard.securityCode,
+       //     "encryptedExpiryMonth":encryptedCard.expiryMonth,
+       //     "encryptedExpiryYear":encryptedCard.expiryYear
+       // ]
 
         let dict = [
-            "encryptedNumber":encryptedCard.number,
-            "encryptedSecurityCode":encryptedCard.securityCode,
-            "encryptedExpiryMonth":encryptedCard.expiryMonth,
-            "encryptedExpiryYear":encryptedCard.expiryYear
-        ]
+                    "encryptedNumber":"",
+                    "encryptedSecurityCode":"",
+                    "encryptedExpiryMonth":"",
+                    "encryptedExpiryYear":""
+                ]
+
         completion(dict as NSDictionary)
 
     }
 
-    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) throws {
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
             let arguments = call.arguments as? NSDictionary
             switch (call.method) {
             case "encryptedCard":
-               try encryptedCard(arguments!) { (encryptedCard) in
+               encryptedCard(arguments!) { (encryptedCard) in
                     result(encryptedCard)
                 }
             default:
