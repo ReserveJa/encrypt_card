@@ -21,15 +21,19 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
         let generationDate = dateFormatter.date(from: generationDateString!)
 
-        let encryptedCard = CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!)
+        do {
+            let encryptedCard = try CardEncryptor.encryptedCard(for: card, publicKey: publicKeyToken!)
 
+            let dict = [
+                 "encryptedNumber":encryptedCard.number,
+                 "encryptedSecurityCode":encryptedCard.securityCode,
+                 "encryptedExpiryMonth":encryptedCard.expiryMonth,
+                 "encryptedExpiryYear":encryptedCard.expiryYear]
 
-       // let dict = [
-       //     "encryptedNumber":encryptedCard.number,
-       //     "encryptedSecurityCode":encryptedCard.securityCode,
-       //     "encryptedExpiryMonth":encryptedCard.expiryMonth,
-       //     "encryptedExpiryYear":encryptedCard.expiryYear
-       // ]
+            completion(dict as NSDictionary)
+        } catch {
+               print(error)
+           }
 
         let dict = [
                     "encryptedNumber":"",
