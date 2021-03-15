@@ -8,32 +8,7 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         let instance = SwiftEncryptCardPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
-    
-    private func encryptedToken(_ arguments: NSDictionary,completion: @escaping Completion<String>) {
-        let publicKeyToken = arguments["publicKeyToken"] as? String
-        let cardNumber = arguments["cardNumber"] as? String
-        let cardSecurityCode = arguments["cardSecurityCode"] as? String
-        let cardExpiryMonth = arguments["cardExpiryMonth"] as? String
-        let cardExpiryYear = arguments["cardExpiryYear"] as? String
-        let card = CardEncryptor.Card.init(number: cardNumber, securityCode: cardSecurityCode, expiryMonth: cardExpiryMonth, expiryYear: cardExpiryYear)
-        let environmentString = arguments["environment"] as? String
-        let env = environmentString=="TEST" ? CardEncryptor.Environment.test : CardEncryptor.Environment.live
-        let holderName = arguments["holderName"] as? String
-        let generationDateString = arguments["generationDate"] as? String
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
-        let generationDate = dateFormatter.date(from: generationDateString!)
-        
-        
-        CardEncryptor.encryptedToken(for: card, holderName: holderName, publicKeyToken: publicKeyToken!, generationDate: generationDate!, environment: env) { (resultToken) in
-            switch resultToken {
-            case .success(let token):
-                completion(token)
-            case .failure(let error):
-                completion("error")
-            }
-        }
-    }
+
     
     private func encryptedCard(_ arguments: NSDictionary,completion: @escaping Completion<NSDictionary>) {
         let publicKeyToken = arguments["publicKeyToken"] as? String
@@ -42,17 +17,13 @@ public class SwiftEncryptCardPlugin: NSObject, FlutterPlugin {
         let cardExpiryMonth = arguments["cardExpiryMonth"] as? String
         let cardExpiryYear = arguments["cardExpiryYear"] as? String
         let card = CardEncryptor.Card.init(number: cardNumber, securityCode: cardSecurityCode, expiryMonth: cardExpiryMonth, expiryYear: cardExpiryYear)
-        //let environmentString = arguments["environment"] as? String
-        //let environment = environmentString=="TEST" ? CardEncryptor.Environment.test : CardEncryptor.Environment.live
         let generationDateString = arguments["generationDate"] as? String
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
         let generationDate = dateFormatter.date(from: generationDateString!)
         
-        CardEncryptor.encryptedCard(for: card
-            , publicKeyToken: publicKeyToken!
-            , generationDate: generationDate!
-        , environment: environment) { (resultEncryptedCard) in
+        CardEncryptor.encrypt(for: card
+            , publicKeyToken: publicKeyToken!) { (resultEncryptedCard) in
             switch resultEncryptedCard {
             case .success(let encryptedCard):
                 let dict = [
